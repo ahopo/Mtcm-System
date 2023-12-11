@@ -1,0 +1,20 @@
+.table-responsive {
+  height: 50vh; //web
+  // height:600px; // desktop
+  overflow-y: scroll;
+}
+.table-responsive::-webkit-scrollbar {
+  display: none;
+}
+
+.table-checkbox {
+  height: 30vh; //web
+  margin-bottom: 10px;
+  border-bottom: 1px solid grey;
+  border-top: 1px solid grey;
+  // height:600px; // desktop
+  overflow-y: scroll;
+}
+.table-checkbox::-webkit-scrollbar {
+  display: none;
+}

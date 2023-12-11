@@ -1,0 +1,121 @@
+<div class="container-fluid ">
+
+    <div class="row p-1  mr-0" id="topdiv">
+        <div class="col-sm-8 p-0">
+            <div class="input-group">
+                <h4 class="ml-3 mr-4">List of Customer</h4>
+                <input type="text" class="form-control" placeholder="Search By Name, Email" name="search"
+                    [(ngModel)]="SearchVal" (input)="search()">
+
+                <button class="btn btn-outline-secondary border-left-0 border-top border-bottom border-right rounded-0"
+                    id="searchbutton" (click)="search()">
+                    <bi name="search"></bi>
+                </button>
+                <button class="btn btn-outline-secondary border-left-0 border-top border-bottom border-right rounded-0"
+                    (click)="displayTransactions()" type="button">
+                    <bi name="arrow-clockwise"></bi>
+                </button>
+                <button class="btn btn-outline-secondary border-left-0 border-top border-bottom border-right rounded-0"
+                    (click)="downloadCSV()">
+                    <small>
+                        <bi name="file-spreadsheet"></bi> Download CSV
+                    </small>
+                </button>
+            </div>
+        </div>
+
+        <div class="col d-flex justify-content-end">
+            <pagination-controls id='main' previousLabel="" nextLabel="" autoHide="true" (pageChange)="page = $event">
+            </pagination-controls>
+        </div>
+    </div>
+    <div class="d-flex m-0 flex-column">
+        <div *ngIf="loading" class="d-flex justify-content-center w-100" style="margin-top:100px;">
+            <div class="spinner-border text-secondary" role="status">
+                <span class="sr-only">Loading...</span>
+            </div>
+        </div>
+
+        <div class="table-responsive" *ngIf="!loading" (scroll)="onContainerScroll($event)">
+            <table class="table table-striped table-bordered text-xsmall  table-sm table-hover" style="width: 100%">
+                <thead *ngIf="Transactions.length!=0">
+                    <tr>
+                        <th style="width: 2%">
+                            <h6>{{Transactions.length}}</h6>
+                        </th>
+                        <th style="width: 30%" scope="col" colspan="3" class="text-center">Full Name</th>
+                        <th style="width: 35%" scope="col" colspan="2" class="text-center">Contact</th>
+                        <th style="width: 30%" scope="col" class="text-center">Actions</th>
+                    </tr>
+                    <tr>
+                        <th scope="col">#</th>
+                        <th scope="col" style="width: 15%" class="text-center">First Name</th>
+                        <th scope="col" style="width: 15%" class="text-center">Middle Name</th>
+                        <th scope="col" style="width: 15%" class="text-center">Last Name</th>
+                        <th scope="col" style="width: 16%" class="text-center">Phone Number</th>
+                        <th scope="col" style="width: 16%" class="text-center">Email</th>
+                        <th scope="col" class="p-1">
+
+                            <div class="d-flex justify-content-center">
+                                <div class="spinner-border " *ngIf="lockLoad" role="status">
+                                    <span class="sr-only">Loading...</span>
+                                </div>
+                                <button class="btn btn-success flex-fill p-1" (click)="openModal()"
+                                    *ngIf="locks.HA||locks.HAS">
+                                    <bi name="person-plus"></bi>
+                                    <small class="ml-1 ">Add New Client</small>
+                                </button>
+                            </div>
+                        </th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr class="tablerow"
+                        *ngFor="let item of Transactions.reverse() | paginate: { itemsPerPage: 30, currentPage: page,id:'main' };index as i">
+                        <th scope="row">{{i+1}}</th>
+                        <td>{{item.firstName=="undefined" ?"Not Available":item.firstName}}</td>
+                        <td>{{item.middleName=="undefined" ?"Not Available":item.middleName}}</td>
+                        <td>{{item.lastName=="undefined" ?"Not Available":item.lastName}}</td>
+                        <td>{{item.phoneNumber=="undefined" ?"Not Available":item.phoneNumber}}</td>
+                        <td>{{item.email=="undefined" ?"Not Available":item.email}}</td>
+                        <td>
+                            <div class="d-flex justify-content-center">
+                                <div class="spinner-border" *ngIf="lockLoad" role="status">
+                                    <span class="sr-only">Loading...</span>
+                                </div>
+                                <button *ngIf="locks.HV" class="btn btn-info btn-sm flex-fill m-1"
+                                    (click)="viewTransaction(item)">
+                                    <bi name="eye"></bi>View
+                                </button>
+                                <button *ngIf="locks.HE||locks.HES" class="btn btn-warning btn-sm flex-fill m-1"
+                                    (click)="goToEditForm(item.id,item.firstName+' '+item.lastName,item.email)"
+                                    routerLink="/transaction/update">
+                                    <bi name="briefcase"></bi>Transactions
+                                </button>
+                                <button *ngIf="locks.HDS||locks.HD" [disabled]="item.protected>0"
+                                    class="btn btn-danger btn-sm flex-fill m-1" (click)="deleteTransaction(item)">
+                                    <bi name="trash"></bi>Delete
+                                </button>
+                            </div>
+                        </td>
+                    </tr>
+                    <tr *ngIf="Transactions.length==0 && donefetching">
+                        <td class="align-middle" id="nofoundata">
+                            <h3>NO DATA FOUND!</h3> <small class="text-danger">Please contact your
+                                Administrator.</small>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+        <div class="row p-0 m-0">
+            <div class="col-6"></div>
+            <div class="col-6 d-flex justify-content-end">
+                <pagination-controls id="main" autoHide="true" previousLabel="" nextLabel=""
+                    (pageChange)="page = $event">
+                </pagination-controls>
+            </div>
+        </div>
+    </div>
+
+</div>

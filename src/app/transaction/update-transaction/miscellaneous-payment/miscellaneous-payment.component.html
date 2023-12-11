@@ -1,0 +1,77 @@
+<div class="container-fluid row pl-0">
+    <div class="col-2 p-1">
+        <div class="list-group  ">
+            <h5 class="text-center">Mausoleum/s</h5>
+            <button class=" btn btn-outline-success m-0 pr-1 pl-1 mb-2 btn-sm"
+                [ngClass]="{'active':memmodels[i]==currentindex}" (click)="getIndex(i)" [id]="i"
+                *ngFor="let item of memparkList;index as i">
+                <h5>{{item.name}}</h5>
+                <div *ngIf="item.name=='Memorial lot'||item.name=='Lawn'">
+                    <small>
+                        <i>
+                            <bi name="geo-alt"></bi> {{item.phase|uppercase}}, BLOCK : {{item.block}}, LOT :
+                            {{item.lot}}
+                        </i>
+                    </small>
+
+                </div>
+                <div *ngIf="item.name=='Apartment'||item.name=='Bone Crypt'">
+                    <small>
+                        <i>
+                            <bi name="geo-alt"></bi> {{item.phase|uppercase}}, COLUMN : {{item.column}}, VAULT :
+                            {{item.vault}}
+                        </i>
+                    </small>
+                </div>
+            </button>
+        </div>
+    </div>
+    <div class="col p-1 border-left form-group border-top">
+        <div class="table-responsive">
+            <table class="table table-striped table-bordered text-xsmall  table-sm table-hover " style="width: 100%">
+                <thead>
+                    <tr>
+                        <th scope="col" class="text-center" style="width: 10%;">O.R number</th>
+                        <th scope="col" class="text-center" style="width:10%">Date</th>
+                        <th scope="col" class="text-center" style="width:10%">Payment Received</th>
+                        <th scope="col" class="text-center" style="width:10%">Payer</th>
+                        <th scope="col" class="text-center">Description</th>
+                        <th scope="col" class="text-center" style="width: 10%;">Receipt</th>
+                        <th scope="col" class="text-center " style="width:21%">
+                            <div class="d-flex ">
+                                <button class="btn btn-success flex-fill " (click)="newMiscFee()">
+                                    <bi name="cash"></bi>
+                                    <small class="ml-1 ">Add payment</small>
+                                </button>
+                            </div>
+                        </th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr *ngFor="let item  of miscList">
+                        <td class="text-center">{{item.or_number}}</td>
+                        <td class="text-center">{{item.process_at|date:'LLLL dd yyyy'}}</td>
+                        <td class="text-center">{{item.payment}}</td>
+                        <td class="text-center">{{item.payer}}</td>
+                        <td class="text-center">{{item.description}}</td>
+                        <td class="text-center">
+                            <div class="d-flex">
+                                <button class="btn btn-outline-secondary flex-fill"
+                                    (click)="getDataAndGenerate(item.deals_id,item.or_number)">
+                                    <bi name="download"></bi>
+                                </button>
+                            </div>
+                        </td>
+                        <td class="text-center">
+                            <div class="d-flex">
+                                <button class="btn btn-danger flex-fill" (click)="deleteMiscFee(item)">
+                                    <bi name="trash"></bi>Delete
+                                </button>
+                            </div>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>

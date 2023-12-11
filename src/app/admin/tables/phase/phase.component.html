@@ -1,0 +1,56 @@
+<div class="d-flex justify-content-around flex-column">
+  <div class="container p-4">
+    <div class=" form-group row  ">
+      <label for="name" class="col-sm-2">Name</label>
+      <input type="name" class=" col form-control form-control-sm" id="name" name="name" [(ngModel)]="NAME">
+    </div>
+    <div class="form-group row ">
+      <label for="description" class="col-sm-2">Description</label>
+      <textarea rows="2" class="col form-control form-control-sm" id="description" name="description"
+        [(ngModel)]="DESCRIPTION"></textarea>
+    </div>
+    <div *ngIf="editphase">
+      <button class="btn btn-success mr-2" (click)="update()">Update</button>
+      <button class="btn btn-danger" (click)="editphase=false">Cancel</button>
+    </div>
+    <div class="d-flex justify-content-end ">
+      <button *ngIf="!editphase&&lock.ATPA||lock.ATPAS&&!editphase" [disabled]="!(NAME.length>0)"
+        class="btn btn-success" (click)="save()">Submit</button>
+    </div>
+  </div>
+  <div class="container-fluid mt-2 table-responsive ">
+    <button class="btn btn-info btn-sm mb-1" (click)="downloadCSV()">
+      <small>
+        <bi name="file-spreadsheet"></bi> download CSV
+      </small>
+
+    </button>
+    <table class="table table-striped table-bordered">
+      <thead>
+        <tr>
+          <th scope="col">#</th>
+          <th scope="col" style="width: 30%" class="text-center">Name</th>
+          <th scope="col" class="text-center">Description</th>
+          <th scope="col" style="width: 20%" class="text-center">Action</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let item of phaseList ;index as i">
+          <th scope="row">{{i+1}}</th>
+          <td>{{item.name}}</td>
+          <td>{{item.description}}</td>
+          <td class="m-0 p-1">
+            <div class="d-flex  ">
+              <button *ngIf="lock.ATPE||lock.ATPES" class="btn btn-warning flex-fill mr-2" (click)="edit(item)">
+                <bi name="pencil-square"></bi>Edit
+              </button>
+              <button *ngIf="lock.ATPD||lock.ATPDS" class="btn btn-danger flex-fill" (click)="delete(item)">
+                <bi name="trash"> </bi>Delete
+              </button>
+            </div>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</div>

@@ -1,0 +1,34 @@
+<div class="container-fluid    p-0 m-0 row">
+    <div class="col-2 p-1 list-group">
+        <h4 class="text-center">Admin Tools</h4>
+        <a *ngIf="lock.AU" class="list-group-item list-group-item-action" [routerLink]="['user']"
+            [routerLinkActive]="['active']">
+            <bi name="people"></bi> Users
+        </a>
+        <a *ngIf="lock.AG" class=" list-group-item list-group-item-action" [routerLink]="['group']"
+            [routerLinkActive]="['active']">
+            <bi name="collection"></bi> Groups
+        </a>
+        <a *ngIf="lock.ATP||lock.ATI||lock.ATO" class=" list-group-item list-group-item-action"
+            [routerLink]="['tables']" [routerLinkActive]="['active']">
+            <bi name="table"></bi> Tables
+        </a>
+        <a *ngIf="lock.AP" class=" list-group-item list-group-item-action" [routerLink]="['template']"
+            [routerLinkActive]="['active']">
+            <bi name="file-earmark-arrow-down"></bi> Templates
+        </a>
+        <!-- <a class=" list-group-item list-group-item-action" [routerLink]="['reports']" [routerLinkActive]="['active']">
+            <bi name="bar-chart"></bi>Reports
+        </a> -->
+        <a *ngIf="lock.AL" class=" list-group-item list-group-item-action" [routerLink]="['logs']"
+            [routerLinkActive]="['active']">
+            <bi name="card-list"></bi>Logs
+        </a>
+    </div>
+    <div *ngIf="!loading" class="col p-1">
+        <router-outlet></router-outlet>
+    </div>
+
+
+</div>
+<ngx-loading [show]="loading" [config]="{ backdropBorderRadius: '3px' }"></ngx-loading>

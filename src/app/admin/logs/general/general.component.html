@@ -1,0 +1,91 @@
+<div class="container-fluid">
+    <div class="d-flex justify-content-end ">
+        <div class="row flex-fill mb-1">
+            <div class="col">
+                <label for="user">User</label>
+                <select name="user" id="user" class="form-control" [(ngModel)]="selectedUser" (change)="filter()">
+                    <option value="All"> All</option>
+                    <option [value]="user" *ngFor="let user of userList">{{user}}</option>
+                </select>
+            </div>
+            <div class="col">
+                <label for="type">Type</label>
+                <select name="type" id="type" class="form-control" [(ngModel)]="selectedType" (change)="filter()">
+                    <option value="All"> All</option>
+                    <option [value]="type" *ngFor="let type of TypeList">{{type}}</option>
+                </select>
+            </div>
+            <div class="col">
+                <label for="type">Section</label>
+                <select name="type" id="type" class="form-control" [(ngModel)]="selectedSection" (change)="filter()">
+                    <option value="All"> All</option>
+                    <option [value]="section" *ngFor="let section of SectionList">{{section}}</option>
+                </select>
+            </div>
+            <div class="col">
+                <label for="type">From</label>
+                <input class=" mr-2" type="date" name="from" id="from" class="form-control" [(ngModel)]="fromDate"
+                    (change)="filter()">
+            </div>
+            <div class="col">
+                <label for="type">To</label>
+                <input class="mr-2" type="date" name="to" id="to" [min]="fromDate" class="form-control"
+                    [(ngModel)]="toDate" (change)="filter()">
+            </div>
+            <div class="col d-flex w-100">
+                <button class="btn btn-outline-secondary flex-fill" (click)="clearfilter()">Clear filter</button>
+            </div>
+        </div>
+
+    </div>
+    <div>
+        <pagination-controls class="mt-4" id='log' previousLabel="" nextLabel="" autoHide="true"
+            (pageChange)="page = $event">
+        </pagination-controls>
+    </div>
+    <div class="table-responsive">
+        <div>
+            <table class="table table-striped table-bordered text-xsmall  table-sm table-hover">
+                <thead>
+                    <tr>
+                        <th scope="col" style="width: 2%;">#</th>
+                        <th scope="col" style="width: 6%;">Type</th>
+                        <th scope="col">Message</th>
+                        <th scope="col" style="width: 8%;">Section</th>
+                        <th scope="col" style="width: 10%;">Date</th>
+                        <th scope="col" style="width: 10%;">From</th>
+                        <th scope="col" style="width: 10%;">To</th>
+                        <th scope="col" style="width: 15%;">User</th>
+                        <!-- <th scope="col" style="width: 8%;" class="text-center">Action</th> -->
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr
+                        *ngFor="let item of logsList.reverse()  | paginate: { itemsPerPage:25, currentPage: page ,id:'log'};index as i">
+                        <th scope=" row">{{i+1}}</th>
+                        <td class="text-center"
+                            [ngClass]="{'text-dark':item.type=='LOGIN','text-success':item.type=='CREATE','text-warning ':item.type=='UPDATE'||item.type=='REPLACE','text-danger':item.type=='DELETE'}">
+
+                            {{item.type}}
+                        </td>
+                        <td>
+                            <small>
+                                <i>
+                                    {{item.message}}
+                                </i>
+                            </small>
+                        </td>
+                        <td class="text-center">
+                            {{item.section}}</td>
+                        <td><small>{{item.created_at_str}}</small></td>
+                        <td>{{item._from}}</td>
+                        <td>{{item._to}}</td>
+                        <td>{{item.user_fullname}}</td>
+
+                    </tr>
+
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>

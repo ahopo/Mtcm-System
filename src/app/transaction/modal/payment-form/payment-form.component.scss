@@ -1,0 +1,8 @@
+.table-responsive {
+  max-height: 40vh; //web
+  // height:600px; // desktop
+  overflow-y: scroll;
+}
+.table-responsive::-webkit-scrollbar {
+  display: none;
+}

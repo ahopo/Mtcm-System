@@ -1,0 +1,149 @@
+<div class="d-flex justify-content-end mb-1">
+    <div class="flex-fill">
+        <h5>Memorial Lot Table</h5>
+    </div>
+    <div *ngIf="memList.length>=10">
+        <pagination-controls id="main" previousLabel="" nextLabel="" autoHide="true" (pageChange)="page = $event">
+        </pagination-controls>
+    </div>
+
+</div>
+<div class="table-responsive">
+    <table class="table table-striped table-bordered table-sm table-hover">
+        <thead>
+            <tr class="form-group">
+                <th style="width: 2%;">{{memList.length}}</th>
+                <th style="width: 8%;">
+                    <div>
+                        <select class="form-control form-control-sm" name="phase" id="phase"
+                            [(ngModel)]="filter.phase_id" (change)="search()">
+                            <option value="0" label="All" selected></option>
+                            <option *ngFor="let phase of phaseList" [value]="phase.id" [label]="phase.name"></option>
+                        </select>
+                    </div>
+                </th>
+                <th style="width: 5%;">
+                    <div>
+                        <input class="form-control form-control-sm" type="text" name="block" id="block"
+                            [(ngModel)]="filter.block" (input)="search()" placeholder="BLOCK">
+                    </div>
+                </th>
+                <th style="width: 5%;">
+                    <div>
+                        <input class="form-control form-control-sm" type="text" name="lot" id="lot"
+                            [(ngModel)]="filter.lot" (input)="search()" placeholder="LOT">
+                    </div>
+                </th>
+                <th style="width: 5%;">
+                    <div>
+                        <input class="form-control form-control-sm" type="text" name="area" id="area"
+                            [(ngModel)]="filter.area" (input)="search()" placeholder="AREA">
+                    </div>
+                </th>
+
+                <th style="width: 10%;">
+                    <div>
+                        <input class="form-control form-control-sm" type="text" name="price" id="price"
+                            [(ngModel)]="filter.price" (keyup.enter)="search()" currencyMask [options]="options"
+                            placeholder="PRICE">
+                    </div>
+                </th>
+                <th>
+                    <div class="input-group input-group-sm">
+                        <input type="text" class="form-control " placeholder="Current Owner" readOnly
+                            [(ngModel)]="currentOwner" aria-describedby="btn-currnentowner">
+                        <div class="input-group-append">
+                            <button class="btn btn-outline-secondary btn-sm pb-0" type="button" id="btn-currnentowner"
+                                (click)="getCurrentOwner()">
+                                <bi name="search"></bi>
+                            </button>
+                        </div>
+                    </div>
+                </th>
+                <th style="width:8%;">
+                    <div>
+                        <select class="form-control form-control-sm" name="phase" id="phase"
+                            [(ngModel)]="filter.is_available" (change)="search()">
+
+                            <option value="0" label="All" selected></option>
+                            <option value="2" label="Available"></option>
+                            <option value="1" label="Not Available"></option>
+                        </select>
+                    </div>
+                </th>
+
+                <th style="width: 300px;">
+                    <div class="d-flex ">
+                        <div class="btn btn-secondary flex-fill btn-sm mr-1" (click)="clearSearch()">
+                            <bi name="arrow-clockwise"></bi>Clear
+                        </div>
+                        <div class="btn btn-light flex-fill btn-sm" (click)="downloadCSV()">
+                            <bi name="file-spreadsheet"></bi>Download CSV
+                        </div>
+                    </div>
+                </th>
+            </tr>
+            <tr>
+                <th>#</th>
+                <th class="text-center">Phase</th>
+                <th class="text-center">Block</th>
+                <th class="text-center">Lot</th>
+                <th class="text-center">Area</th>
+
+                <th class="text-center">Price</th>
+                <th style="width: 30%;" class="text-center">Current Owner</th>
+                <th>Status</th>
+                <th style="width: 20%;">
+                    <div class="d-flex justify-content-center">
+                        <div class="spinner-border" *ngIf="lockLoad" role="status">
+                            <span class="sr-only">Loading...</span>
+                        </div>
+                        <button *ngIf="locks.MPMLA||locks.MPMLAS" class="btn btn-success flex-fill" (click)="newLot()">
+                            <bi name="node-plus"></bi> New Lot
+                        </button>
+                    </div>
+                </th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr class="tablerow"
+                *ngFor="let mem of memList.reverse() | paginate: { itemsPerPage: 20, currentPage: page ,id:'main'};index as i">
+                <th scope="row">{{i+1}}</th>
+                <td>{{mem.phase}}</td>
+                <td>{{mem.block}}</td>
+                <td>{{mem.lot}}</td>
+                <td>{{mem.area}}</td>
+
+                <td class="text-right font-weight-bold">{{mem.price|currency:'₱':'code'}}</td>
+                <!--   -->
+                <td class="text-center">
+                    <span *ngIf="!hascustomer">{{mem.currentOwner}}</span>
+                    <a routerLink="/transaction/update" *ngIf="hascustomer"
+                        (click)="goToEditForm(mem.customer_id)">{{mem.currentOwner}}</a>
+                </td>
+                <td [ngClass]="{'text-danger':mem.is_available==1}" class="text-success text-center">
+                    {{mem.is_available==1?'Not Available':'Available'}}</td>
+                <td style="width: 300px;">
+                    <div class="d-flex p-0 justify-content-center">
+                        <div class="spinner-border" *ngIf="lockLoad" role="status">
+                            <span class="sr-only">Loading...</span>
+                        </div>
+                        <button *ngIf="locks.MPMLV" class="btn btn-info btn-sm flex-fill m-1" (click)="viewLot(mem)">
+                            <bi name="eye"></bi>View
+
+                        </button>
+                        <button *ngIf="locks.MPMLE||locks.MPMLES" class="btn btn-warning btn-sm flex-fill m-1"
+                            (click)="updateLot(mem)">
+                            <bi name="pencil-square"></bi>Edit
+                        </button>
+                        <button *ngIf="locks.MPMLD||locks.MPMLDS" class="btn btn-danger btn-sm flex-fill m-1"
+                            [disabled]="mem.is_available==1" (click)="delete(mem)">
+                            <bi name="trash"></bi>Delete
+                        </button>
+                    </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+</div>
+<ngx-loading [show]="loading" [config]="{ backdropBorderRadius: '3px' }" id="loadingmem"></ngx-loading>

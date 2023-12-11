@@ -1,0 +1,27 @@
+<div class="container-fluid   row ">
+    <div id="list" class="list-group  mr-1 p-1   col-2  p-1">
+
+        <a *ngIf="lock.MPML" class=" list-group-item list-group-item-action mr-4" [routerLink]="['memoriallot']"
+            [routerLinkActive]="['active']">
+            <bi name='geo-alt'></bi> Memorial Lot
+        </a>
+        <a *ngIf="lock.MPL" class=" list-group-item list-group-item-action listitem" [routerLink]="['lawn']"
+            [routerLinkActive]="['active']">
+            <bi name='geo-alt'></bi> Lawn
+        </a>
+        <a *ngIf="lock.MPBC" class=" list-group-item list-group-item-action listitem" [routerLink]="['bonecrypt']"
+            [routerLinkActive]="['active']">
+            <bi name='bounding-box-circles'></bi> Bone Crypt
+        </a>
+        <a *ngIf="lock.MPA" class=" list-group-item list-group-item-action listitem" [routerLink]="['apartment']"
+            [routerLinkActive]="['active']">
+            <bi name='bounding-box-circles'></bi>
+            Apartment
+        </a>
+
+    </div>
+    <div *ngIf="!loading" class="col p-1" style="width: 85%;">
+        <router-outlet></router-outlet>
+    </div>
+</div>
+<ngx-loading [show]="loading" [config]="{ backdropBorderRadius: '3px' }"></ngx-loading>

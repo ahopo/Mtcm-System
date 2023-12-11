@@ -1,0 +1,15 @@
+<ul class="nav nav-tabs">
+  <li class="nav-item" *ngIf="lock.ATP">
+    <a class="nav-link" [routerLink]="['phase']" [routerLinkActive]="['active']">Phase</a>
+  </li>
+  <li class=" nav-item" *ngIf="lock.ATI">
+    <a class="nav-link" [routerLink]="['installment']" [routerLinkActive]="['active']">Installment</a>
+  </li>
+  <li class="nav-item" *ngIf="lock.ATO">
+    <a class="nav-link" [routerLink]="['or']" [routerLinkActive]="['active']">O.R</a>
+  </li>
+</ul>
+<div class="flex-fill">
+  <router-outlet></router-outlet>
+</div>
+<!-- <a class=" list-group-item list-group-item-action" [routerLink]="['user']" routerLinkActive="active"> <bi name="people"></bi> <small>Users</small></a> -->

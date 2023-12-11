@@ -1,0 +1,45 @@
+<div class="modal-header">
+    <h3>New O.R</h3>
+</div>
+<div class="modal-body">
+    <div class="form-group">
+        <div class="row">
+            <div class="col">
+                <label for="">From</label>
+                <input type="number" name="fromvalue" min=0 id="fromvalue" (keyup)="data['toValue']=data['fromValue']+1"
+                    class="form-control" [(ngModel)]="data['fromValue']">
+            </div>
+            <div class="col">
+                <label for="">To</label>
+                <input [ngClass]="{'border border-danger':data['toValue']<data['fromValue']}" type="number"
+                    name="tovalue" id="tovalue" [min]="data['fromValue']+1" class="form-control"
+                    [(ngModel)]="data['toValue']">
+            </div>
+        </div>
+        <div  >
+            <label for="type">Type</label>
+            <select name="type" id="type" class="form-control" [(ngModel)]="data['type']">
+                <option value="0">VAT</option>
+                <option value="1">Non-VAT</option>
+            </select>
+        </div>
+        <div class="row">
+            <div class="col">
+                <label for="fromdate">From</label>
+                <input type="date" name="fromdate" id="fromdate" class="form-control" [(ngModel)]="data['fromDate']"
+                    (change)="computeDate()">
+            </div>
+            <div class="col">
+                <label for="todate">To</label>
+                <input type="date" name="todate" disabled id="todate" class="form-control" [(ngModel)]="data['toDate']">
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal-footer">
+    <div class="d-flex justify-content-end">
+        <button class="btn btn-danger mr-2" (click)="close()">Cancel</button>
+        <button class="btn btn-success" (click)="save()" [disabled]="data['type']==undefined">Save</button>
+    </div>
+</div>

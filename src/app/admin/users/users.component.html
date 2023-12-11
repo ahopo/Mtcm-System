@@ -1,0 +1,82 @@
+<div class="mt-1">
+    <div class="row mb-2">
+        <div class="col-8">
+            <div class="input-group">
+                <input type="text" class="form-control" placeholder="Search by Name, Email" aria-describedby="search"
+                    [(ngModel)]="searchVal" (keyup)="search()">
+                <div class="input-group-append" id="search">
+                    <button class="btn btn-outline-secondary" type="button">
+                        <bi name="search"></bi>
+                    </button>
+                    <button class="btn btn-outline-secondary" type="button">
+                        <bi name="arrow-clockwise"></bi>
+                    </button>
+                </div>
+            </div>
+        </div>
+        <div class="col d-flex justify-content-end  mr-1">
+            <pagination-controls id="userpag" previousLabel="" nextLabel="" autoHide="true"
+                (pageChange)="page = $event">
+            </pagination-controls>
+        </div>
+    </div>
+    <div class="table-responsive">
+        <table class="table table-striped table-bordered text-xsmall  table-sm table-hover">
+            <thead>
+                <tr>
+                    <th scope="col">#</th>
+                    <th scope="col">Full name</th>
+                    <th scope="col">E-mail</th>
+                    <th scope="col">Phone number</th>
+                    <th scope="col">Group</th>
+                    <th scope="col" style="width: 25%;">
+                        <div *ngIf="lock.AUA||lock.AUAS" class="d-flex"><button class=" btn btn-success flex-fill"
+                                (click)="create()">
+                                <bi name="person-plus"></bi>Add user
+                            </button></div>
+                    </th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr
+                    *ngFor="let user of Users.reverse()  | paginate: { itemsPerPage: 20, currentPage: page,id:'userpag' };index as i">
+                    <th scope="row">{{i+1}}</th>
+                    <td>{{user.firstName}} {{user.lastName}}</td>
+                    <td>{{user.email}}</td>
+                    <td>{{user.phonenumber}}</td>
+                    <td>{{user.groupName}}</td>
+                    <td class=" p-1 m-1">
+                        <div class="d-flex">
+                            <button *ngIf="lock.AUV||currentUser==user.id" class="btn btn-info flex-fill  p-1 m-1"
+                                (click)="vieworedit(user)">
+                                <bi name="eye"></bi> <small class="ml-1 ">View</small>
+                            </button>
+                            <button *ngIf="lock.AUE||lock.AUES" class="btn btn-warning flex-fill  p-1  m-1"
+                                (click)="beforevieworedit(user,'edit')">
+                                <bi name="pencil-square"></bi><small class="ml-1 ">Edit</small>
+                            </button>
+                            <button *ngIf="lock.AUD||lock.AUDS" [disabled]="currentUser==user.id"
+                                class="btn  flex-fill p-1  m-1"
+                                [ngClass]="{'btn-success':currentUser==user.id,'btn-danger':currentUser!=user.id}"
+                                (click)="delete(user)">
+                                <bi name="trash" *ngIf="currentUser!=user.id"></bi><small small class="ml-1 ">
+                                    <span *ngIf="currentUser!=user.id">Delete</span>
+                                    <span *ngIf="currentUser==user.id">Logged in</span>
+                                </small>
+                            </button>
+                        </div>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+    <div class="row">
+        <div class="col-8"></div>
+        <div class="col d-flex justify-content-end mr-1">
+            <pagination-controls id="userpag" previousLabel="" nextLabel="" autoHide="true"
+                (pageChange)="page = $event">
+            </pagination-controls>
+        </div>
+
+    </div>
+</div>

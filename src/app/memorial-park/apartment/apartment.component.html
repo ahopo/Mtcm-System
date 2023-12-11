@@ -1,0 +1,139 @@
+<div class="d-flex justify-content-end mb-1">
+    <div class="flex-fill">
+        <h5>Apartment Table</h5>
+    </div>
+    <div *ngIf="apartmentList.length>=10">
+        <pagination-controls id="main" previousLabel="" nextLabel="" (pageChange)="page = $event">
+        </pagination-controls>
+    </div>
+
+</div>
+<div class="table-responsive">
+    <table class="table table-striped table-bordered table-sm table-hover">
+        <thead>
+            <tr class="form-group">
+                <th style="width: 2%;">{{apartmentList.length}}</th>
+                <th style="width: 9%;">
+                    <div>
+                        <select class="form-control form-control-sm" name="phase" id="phase"
+                            [(ngModel)]="filter.phase_id" (change)="search()">
+                            <option value="0" label="All" selected></option>
+                            <option *ngFor="let phase of phaseList" [value]="phase.id" [label]="phase.name"></option>
+                        </select>
+                    </div>
+                </th>
+                <th style="width: 9%;">
+                    <div>
+                        <input class="form-control form-control-sm" type="text" name="column" id="column"
+                            [(ngModel)]="filter.col" (keypress)="search()" placeholder="COLUMN">
+                    </div>
+                </th>
+                <th style="width: 9%;">
+                    <div>
+                        <input class="form-control form-control-sm" type="text" name="volt" id="volt"
+                            [(ngModel)]="filter.volt" (input)="search()" placeholder="VOLT">
+                    </div>
+                </th>
+                <th style="width: 15%;">
+                    <div>
+                        <input class="form-control form-control-sm" type="text" name="price" id="price"
+                            [(ngModel)]="filter.price" (keyup.enter)="search()" currencyMask [options]="options"
+                            placeholder="PRICE">
+                    </div>
+                </th>
+                <th>
+                    <div class="input-group input-group-sm">
+                        <input type="text" class="form-control " placeholder="Current Owner" readOnly
+                            [(ngModel)]="currentOwner" aria-describedby="btn-currnentowner">
+                        <div class="input-group-append">
+                            <button class="btn btn-outline-secondary btn-sm pb-0" type="button" id="btn-currnentowner"
+                                (click)="getCurrentOwner()">
+                                <bi name="search"></bi>
+                            </button>
+                        </div>
+                    </div>
+                </th>
+                <th style="width:8%;">
+                    <div>
+                        <select class="form-control form-control-sm" name="phase" id="phase"
+                            [(ngModel)]="filter.is_available" (change)="search()">
+
+                            <option value="0" label="All" selected></option>
+                            <option value="2" label="Available"></option>
+                            <option value="1" label="Not Available"></option>
+                        </select>
+                    </div>
+                </th>
+                <th style="width: 260px;">
+                    <div class="d-flex ">
+                        <div class="btn btn-secondary flex-fill btn-sm mr-1" (click)="clearSearch()">
+                            <bi name="arrow-clockwise"></bi>Clear
+                        </div>
+                        <div class="btn btn-light flex-fill btn-sm" (click)="downloadCSV()">
+                            <bi name="file-spreadsheet"></bi>Download CSV
+                        </div>
+                    </div>
+                </th>
+            </tr>
+        </thead>
+        <thead>
+            <tr>
+                <th>#</th>
+                <th class="text-center">Phase</th>
+                <th class="text-center">Level</th>
+                <th class="text-center">Number</th>
+                <th class="text-center">Price</th>
+                <th class="text-center">Current Owner</th>
+                <th class="text-center">Status</th>
+                <th>
+                    <div class="d-flex justify-content-center">
+                        <div class="spinner-border" *ngIf="lockLoad" role="status">
+                            <span class="sr-only">Loading...</span>
+                        </div>
+                        <button *ngIf="locks.MPAA||locks.MPAAS" class="btn btn-success flex-fill" (click)="newVolt()">
+                            <bi name="archive"></bi> New Vault
+                        </button>
+                    </div>
+                </th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr class="tablerow"
+                *ngFor="let bone of apartmentList.reverse() | paginate: { itemsPerPage: 20, currentPage: page ,id:'main'};index as i">
+                <td>{{i+1}}</td>
+                <td class="text-center">{{bone.phase}}</td>
+                <td class="text-center">{{bone.col}}</td>
+                <td class="text-center">{{bone.volt}}</td>
+                <td class="text-center">{{bone.price|currency:'₱':'code'}}</td>
+                <td class="text-center">
+                    <span *ngIf="!hascustomer">{{bone.currentOwner}}</span>
+                    <a routerLink="/transaction/update" *ngIf="hascustomer"
+                        (click)="goToEditForm(bone.customer_id)">{{bone.currentOwner}}</a>
+                </td>
+                <td [ngClass]="{'text-danger':bone.is_available==1}" class="text-success text-center">
+                    {{bone.is_available==1?'Not Available':'Available'}}
+
+                <td>
+                    <div class="d-flex p-0 justify-content-center">
+                        <div class="spinner-border" *ngIf="lockLoad" role="status">
+                            <span class="sr-only">Loading...</span>
+                        </div>
+                        <button *ngIf="locks.MPAV" class="btn btn-info btn-sm flex-fill m-1" (click)="viewVolt(bone)">
+                            <bi name="eye"></bi>View
+
+                        </button>
+                        <button *ngIf="locks.MPAE||locks.MPAES" class="btn btn-warning btn-sm flex-fill m-1"
+                            (click)="updateVolt(bone)">
+                            <bi name="pencil-square"></bi>Edit
+                        </button>
+                        <button *ngIf="locks.MPAD||locks.MPADS" class="btn btn-danger btn-sm flex-fill m-1"
+                            (click)="delete(bone)" [disabled]="bone.is_available==1">
+                            <bi name="trash"></bi>Delete
+                        </button>
+                    </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+</div>
+<ngx-loading [show]="loading" [config]="{ backdropBorderRadius: '3px' }" id="loadingbone"></ngx-loading>

@@ -1,0 +1,114 @@
+<div class="container">
+    <div class="row    border-bottom" style="height: 0px im !important">
+        <div class="col-6 p-0 m-0">
+            <form class="w-75 mt-2">
+                <div class="form-group">
+                    <label for="name" class="col-sm-2">Name</label>
+                    <input type="name" class=" col form-control" id="name" name="name" [(ngModel)]="groupData.name">
+                </div>
+                <div class="form-group">
+                    <label for="description" class="col-sm-2">Description</label>
+                    <textarea rows="2" class="col form-control" id="description" name="description"
+                        [(ngModel)]="groupData.description"></textarea>
+                </div>
+                <div *ngIf="onEdit&&(lock.AGE||lock.AGES)">
+                    <button class="btn btn-danger mr-2" (click)="cancel()">Cancel</button>
+                    <button class="btn btn-success" (click)="saveEdit() " [disabled]="groupData.name==''"> Save</button>
+                </div>
+                <button *ngIf="!onEdit&&(lock.AGA||lock.AGAS)" type="submit" class="btn btn-success"
+                    (click)="createGroup()" [disabled]="groupData.name==''">Submit</button>
+            </form>
+        </div>
+        <div class="col-6 mt-1 p-0 m-0">
+            <div class="row m-0 p-2">
+
+                <div class="col-6 border-right">
+                    <label for="search">Search</label>
+                    <input type="text" name="search" id="search" class="form-control" [(ngModel)]="searchVal"
+                        (keyup)="search()">
+                </div>
+                <div class="col-3">
+                    <label for="selectid">Section</label>
+                    <select class="form-control ml-2 mr-2 p-1  border border-primary" [(ngModel)]="selectedname"
+                        name="selectid" id="selectid" (change)="filter()">
+                        <option value="" label="All" selected></option>
+                        <option *ngFor="let item of rolesName">{{item}}</option>
+
+                    </select>
+                </div>
+
+                <div class="col-3">
+                    <label for="action">Action</label>
+                    <select class="form-control ml-2 mr-2 p-1  border border-primary" [(ngModel)]="selectedaction"
+                        name="selectid" id="action" (change)="filter()">
+                        <option value="" label="All" selected></option>
+                        <option *ngFor="let item of actionslist">{{item}}</option>
+                    </select>
+                </div>
+            </div>
+            <div class="table-checkbox">
+                <table class="table table-striped table-bordered text-xsmall  table-sm table-hover">
+                    <thead>
+                        <tr>
+                            <th scope="col" style="width: 5%;">
+                                <input [disabled]="groupData.name==''" type="checkbox" name="checkall"
+                                    [(ngModel)]="checkall" (click)="checkAll()">
+                            </th>
+                            <th scope="col" style="width: 70%;">Function</th>
+                            <th scope="col">Section</th>
+                        </tr>
+                    </thead>
+                    <tbody id="tablebody">
+                        <tr
+                            *ngFor="let role of ROLES.reverse() | paginate: { itemsPerPage: 10, currentPage: page };index as i">
+                            <td>
+                                <input [disabled]="groupData.name==''" type="checkbox"
+                                    [id]="role.id==77?'admincheck':''" [(ngModel)]="function[role.id]"
+                                    (change)="getfunctions(role.id,function[role.id])">
+                            </td>
+                            <td><small>{{role.description}}</small> </td>
+                            <td> <small>{{role.name}}</small> </td>
+                        </tr>
+                    </tbody>
+                </table>
+
+            </div>
+            <div class="d-flex justify-content-center mb-1">
+                <pagination-controls previousLabel="" nextLabel="" autoHide="true" (pageChange)="pageChanged($event)">
+                </pagination-controls>
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="table-responsive">
+            <table class="  table table-striped table-bordered text-xsmall  table-sm table-hover">
+                <thead>
+                    <tr>
+                        <th> Name</th>
+                        <th>Description</th>
+                        <th style="width:25%">
+                        </th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr *ngFor="let item of groupList">
+                        <td>{{item.name}}</td>
+                        <td>{{item.description}}</td>
+                        <td>
+                            <div class="d-flex  ">
+                                <button *ngIf="lock.AGE||lock.AGES" class="btn btn-warning flex-fill mr-1"
+                                    (click)="edit(item)">
+                                    <bi name="pencil-square"></bi> Edit
+                                </button>
+                                <button *ngIf="lock.AGD||lock.AGDS" class="btn btn-danger flex-fill"
+                                    (click)="delete(item)">
+                                    <bi name="trash"></bi> Delete
+                                </button>
+                            </div>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>

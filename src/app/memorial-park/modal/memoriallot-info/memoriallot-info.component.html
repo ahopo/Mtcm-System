@@ -1,0 +1,82 @@
+<div class="modal-header">
+    <h3>
+        <span class="modal-title" *ngIf="status!=modalstatus.NEW">{{owner.name}}</span>
+        <span class="modal-title" *ngIf="status==modalstatus.NEW">New Lot</span>
+    </h3>
+
+    <!-- <div class="d-flex justify-content-end">
+        <button class="btn mr-2" [ngClass]="{'btn-info':clickbutton==0,'btn-outline-info':clickbutton==1}"
+            (click)="tab(0)">
+            <bi name="info-circle"></bi> Basic Info
+        </button>
+        <button class="btn  " [ngClass]="{'btn-info':clickbutton==1,'btn-outline-info':clickbutton==0}"
+            (click)="tab(1)">
+            <bi name="geo"></bi> Location
+        </button>
+    </div> -->
+</div>
+<div class="modal-body">
+
+    <div class="row mt-2" *ngIf="clickbutton==0">
+        <div class="col-8 ">
+            <img class="view" [src]="memData.lotimage" alt="Click to select"
+                onclick="document.getElementById('selectedImage').click();" name="lotimage" id="lotimage">
+            <input [disabled]="status==modalstatus.VIEW" [disabled]="status==modalstatus.VIEW" type="file" #file
+                id="selectedImage" accept='image/*' style="display: none;" (change)="uploadLotImage(file.files)">
+        </div>
+        <div class="col-4 card">
+            <div class="form-group">
+                <label for="price">Price</label>
+                <input [disabled]="status==modalstatus.VIEW" type="text" class="form-control" name="price" id="price"
+                    [(ngModel)]="memData.price" currencyMask [options]="options">
+                <label for="phase">Phase</label>
+                <select [disabled]="status==modalstatus.VIEW" class="form-control form-control-sm" name="phase"
+                    id="phase" [(ngModel)]="memData.phase_id">
+                    <option *ngFor="let phase of phaseList" [value]="phase.id" [label]="phase.name"> </option>
+                </select>
+                <label for="block">Block</label>
+                <input [disabled]="status==modalstatus.VIEW" type="number"
+                    class="form-control form-control-sm text-right" name="block" id="block" [(ngModel)]="memData.block">
+                <label for="block">Lot</label>
+                <input [disabled]="status==modalstatus.VIEW" type="number"
+                    class="form-control form-control-sm text-right" name="lot" id="lot" [(ngModel)]="memData.lot">
+                <label for="block">Area</label>
+                <input [disabled]="status==modalstatus.VIEW" type="number"
+                    class="form-control form-control-sm text-right" name="area" id="area" [(ngModel)]="memData.area">
+                <div *ngIf="status==modalstatus.UPDATE">
+                    <label for="owner">Current Owner</label>
+                    <div class="input-group input-group-sm">
+                        <input [disabled]="status==modalstatus.VIEW" disabled type="text" class="form-control "
+                            name="owner" placeholder="Current Owner" aria-label="Current Owner" [(ngModel)]="owner.name"
+                            aria-describedby="btn-currnentowner">
+                        <div class="input-group-append">
+                            <button *ngIf="owner.name==''||owner.name==undefined"
+                                class="btn btn-outline-secondary btn-sm pb-0" type="button" id="btn-currnentowner"
+                                (click)="getCurrentOwner()">
+                                <bi name="search"></bi>
+                            </button>
+                            <button *ngIf="owner.name!=undefined" class="btn btn-outline-danger btn-sm pb-0"
+                                type="button" id="btn-currnentowner" (click)="remove(memData)">
+                                <bi name="trash"></bi>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="row mt-2" *ngIf="clickbutton==1">
+
+    </div>
+</div>
+
+<div class="modal-footer">
+    <div class="modal-body">
+        <div class="d-flex justify-content-end">
+            <button class="btn btn-danger mr-2" (click)="cancel()">Cancel</button>
+            <button *ngIf="status==modalstatus.UPDATE||status==modalstatus.NEW" class="btn btn-success"
+                (click)="save()">Save</button>
+        </div>
+    </div>
+</div>
+<ngx-loading [show]="loading" [config]="{ backdropBorderRadius: '3px' }"></ngx-loading>

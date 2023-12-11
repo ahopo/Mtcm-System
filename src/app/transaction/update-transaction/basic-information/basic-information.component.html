@@ -1,0 +1,169 @@
+<div class="row">
+    <div class="col-6">
+        <div class="row">
+            <div class="imageface">
+                <img name="faceimg" [src]="client.faceimg" alt="">
+                <div class="d-flex justify-content-around" [ngClass]="{'bg-secondary':!client.faceimg}">
+                    <button class="btn btn-outline-light btn-sm flex-fill"
+                        onclick="document.getElementById('selectedFaceImage').click();">
+                        <bi name="upload"></bi>
+                    </button>
+                    <input type="file" #facefile id="selectedFaceImage" accept='image/*' style="display: none;"
+                        (change)="uploadFaceImg(facefile.files)">
+                    <button class="btn btn-outline-light flex-fill" (click)="openCamera()">
+                        <bi name="camera"></bi>
+                    </button>
+
+                </div>
+            </div>
+
+            <div class="col row">
+                <div class="row p-0 m-0">
+                    <div class="col">
+                        <label for="frstname">First name</label>
+                        <input type="text" class="form-control form-control-sm" id="frstname" name="firstName"
+                            [(ngModel)]="client.firstName">
+                    </div>
+                    <div class="col">
+                        <label for="midname">Middle name</label>
+                        <input type="text" class="form-control form-control-sm" id="midname" name="middleName"
+                            [(ngModel)]="client.middleName">
+                    </div>
+                    <div class="col">
+                        <label for="lstname">Last name</label>
+                        <input type="text" class="form-control form-control-sm" id="lstname" name="lastName"
+                            [(ngModel)]="client.lastName">
+                    </div>
+                    <div class="col">
+                        <label for="sfxname">Suffix (name)</label>
+                        <input type="text" class="form-control form-control-sm" id="sfxname" name="suffixName"
+                            [(ngModel)]="client.suffixName">
+                    </div>
+                </div>
+                <div class="row p-0 m-0 w-100">
+                    <div class="col ">
+                        <label for="select">Gender</label>
+                        <select name="" id="" name="gender" [(ngModel)]="client.gender"
+                            class="form-control form-control-sm">
+                            <option value="1" label="Male"></option>
+                            <option value="2" label="Female"></option>
+                            <option value="3" label="Other"></option>
+                        </select>
+                    </div>
+                    <div class="col">
+                        <label for="email">Email address</label>
+                        <input type="email" class="form-control form-control-sm" id="email" aria-describedby="emailHelp"
+                            name="email" [(ngModel)]="client.email">
+                    </div>
+                    <div class=" col ">
+                        <label for="phoneNumber">Phone number</label>
+                        <input type="number" class="form-control form-control-sm" id="phoneNumber" name="phoneNumber"
+                            [(ngModel)]="client.phoneNumber">
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="row mb-2">
+            <div class="col ">
+                <label for="address">Address</label>
+                <textArea class="form-control form-control-sm" id="address" name="address" ngDefaultControl
+                    [(ngModel)]="client.address"></textArea>
+            </div>
+        </div>
+        <div class="d-flex justify-center-center align-items-around">
+            <div class="col p-1 border border-1 text-center">
+                <img class="imageid" name="frontID" [src]="client.frontID" alt="Click to select"
+                    onclick="document.getElementById('selectedImage').click();">
+                <div class="row">
+                    <span style="color:red;" *ngIf="frontMessage">{{frontMessage}}</span>
+                    <input type="file" #file id="selectedImage" accept='image/*' style="display: none;"
+                        (change)="previewFront(file.files)">
+
+                </div>
+            </div>
+            <div class="col p-1 border border-1 text-center">
+                <img class="imageid form-image" name="backID" [src]="client.backID" alt="Click to select"
+                    onclick="document.getElementById('selectedBackImage').click();">
+                <div class="row">
+                    <span style="color:red;" *ngIf="backMessage">{{backMessage}}</span>
+                    <input type="file" #backfile id="selectedBackImage" accept='image/*' style="display: none;"
+                        (change)="previewBack(backfile.files)">
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="col-6 border-left">
+        <div class="d-flex p-0 m-0">
+            <div class="p-0 m-0 w-100">
+                <div class="list-group mr-1  ">
+                    <div class="list border-bottom table-responsive p-0 m-0 ">
+                        <table class="table table-striped table-bordered text-xsmall  table-sm table-hover">
+                            <tbody>
+                                <tr *ngFor="let item of memparkList.reverse()">
+                                    <td style="width:30%" class="text-center">
+                                        <h5>{{item.name}}</h5>
+                                        <i>
+                                            <small>{{item.phase|uppercase}}</small>
+                                            <small *ngIf="item.block>0"> BLOCK : {{item.block}}</small>
+                                            <small *ngIf="item.lot!=null"> LOT : {{item.lot}}</small>
+                                            <small *ngIf="item.vault!=null"> VAULT : {{item.vault}}</small>
+                                            <small *ngIf="item.column!=null"> COLUMN : {{item.column}}</small>
+                                        </i>
+                                    </td>
+                                    <td>
+                                        <div class="row  p-0 m-0 ">
+                                            <div *ngFor="let temp of  templateList"
+                                                class=" col-6 d-flex justify-content-between">
+                                                <small>
+                                                    <bi name="patch-check"
+                                                        *ngIf="temp.title=='Certifacate of  ownership'"></bi>
+                                                    <bi name="receipt" *ngIf="temp.title=='Receipt'"></bi>
+                                                    <bi name="file-earmark-text"
+                                                        *ngIf="temp.title!='Receipt'&& temp.title!='Certifacate of  ownership'">
+                                                    </bi>
+                                                    {{temp.title}}
+                                                </small>
+                                                <button class="btn btn-outline-success btn-sm ml-1"
+                                                    (click)="getDataAndGenerate(item, temp)">
+                                                    <bi name="download"></bi>
+                                                </button>
+                                            </div>
+                                        </div>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    <div class="  card-body border border-1 rounded mt-2 mb-1 1 p-1  d-flex justify-content-end">
+                        <span class="flex-fill">
+                            <bi name="card-image"></bi> Front Valid ID
+                        </span>
+                        <button class="btn btn-outline-success btn-sm"
+                            (click)="download(client,client.frontID,'Front Valid I.D')">
+                            <bi name="download"></bi>
+                        </button>
+                    </div>
+                    <div class=" card-body border border-1 rounded mb-1 1 p-1  d-flex justify-content-between">
+                        <span class="flex-fill">
+                            <bi name="card-image"></bi> Back Valid ID
+                        </span>
+                        <button class="btn btn-outline-success btn-sm"
+                            (click)="download(client,client.backID,'Back Valid I.D')">
+                            <bi name="download"></bi>
+                        </button>
+                    </div>
+                    <div class=" card-body border border-1 rounded mb-1 1 p-1  d-flex justify-content-end">
+                        <span class="flex-fill">
+                            <bi name="card-image"></bi> Profile Picture
+                        </span>
+                        <button class="btn btn-outline-success btn-sm"
+                            (click)="download(client,client.faceimg,'Profile picture')">
+                            <bi name="download"></bi>
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+</div>

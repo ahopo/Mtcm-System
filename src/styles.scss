@@ -1,0 +1,29 @@
+/* You can add global styles to this file, and also import other style files */
+
+/* Importing Bootstrap SCSS file. */
+$primary: #28a745;
+@import "~bootstrap/scss/bootstrap";
+body{
+    background-color: #ffffff;
+    background-image: linear-gradient(315deg, #ffffff 0%, #d7e1ec 74%);
+}
+.ngx-pagination > .current > li
+{
+    color: white;
+    background-color: #5A4181 !Important;
+    border: solid 1px #5A4181 !Important;
+}
+
+.ngx-pagination {
+    padding-left: 0px !important;
+    margin-bottom: 0rem !important;
+  }
+
+  .ngx-pagination .current{
+    background: #5BC85B !important;
+    border: transparent !important;
+  }
+
+  .ngx-pagination .current:hover {
+    background: #5BC85B !important;
+    border: transparent !important;}

@@ -1,0 +1,29 @@
+<div class="maindiv">
+    <div class="modal-header  ">
+        <h4 class="modal-title text-center text-white">Login</h4>
+    </div>
+    <div class="modal-body">
+        <form action="form-group">
+            <div class="input-group mb-3">
+                <span class="input-group-text bg-white rounded-0">
+                    <bi name="person-circle"></bi>
+                </span>
+                <input #username type="text" class="form-control" placeholder="Username" aria-label="Username"
+                    aria-describedby="basic-addon1">
+            </div>
+            <div class="input-group mb-3">
+
+                <span class="input-group-text bg-white rounded-0">
+                    <bi name="key"></bi>
+                </span>
+                <input #password type="password" class="form-control" placeholder="Password"
+                    (keyup.enter)='login(username.value, password.value)'>
+            </div>
+        </form>
+
+    </div>
+    <div class="modal-footer">
+        <!-- <button class="btn btn-danger" (click)="close()">Cancel</button> -->
+        <button class="btn btn-success" (click)="login(username.value, password.value)">Login</button>,
+    </div>
+</div>

@@ -1,0 +1,27 @@
+<div class="modal-header bg-warning">
+
+    <h3 class="flex-fill">
+        <span class="modal-title">Warning <span *ngIf="isConfirmation">before removing.</span></span>
+    </h3>
+    <h1>
+        <bi name="exclamation-circle" class="mr-4 modal-title"></bi>
+    </h1>
+
+</div>
+<div class="modal-body">
+    <p class="font-weight-bold font-italic">{{Message}}</p>
+</div>
+<div class="modal-footer d-flex justify-content-end"
+    [ngClass]="{'bg-white':!isConfirmation,'bg-danger':isConfirmation}">
+    <div class=" flex-fill">
+        <small class="text-white font-weight-bold">All data linked to this user will be removed.</small>
+    </div>
+    <div>
+        <button class="btn mr-1" [ngClass]="{'btn-info':!isConfirmation,'btn-light mr-2':isConfirmation}"
+            (click)="close()">Close</button>
+        <button class="btn btn-success" *ngIf="isConfirmation" (click)="save()">
+            Continue
+        </button>
+    </div>
+
+</div>

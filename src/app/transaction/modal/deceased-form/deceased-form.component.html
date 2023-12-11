@@ -1,0 +1,50 @@
+<div class="modal-header">
+    <h3>{{title}}</h3>
+</div>
+<div class="modal-body form-group">
+    <div>
+        <label for="fullname">Full Name</label>
+        <input type="text" name="fullname" id="fullname" class="form-control" [(ngModel)]="form.fullname">
+    </div>
+
+    <div class="row">
+        <div class="col">
+            <div>
+                <label for="birthday">Date of Birth</label>
+                <input type="date" name="birthday" id="birthday" class="form-control" [(ngModel)]="form.date_birth">
+            </div>
+        </div>
+        <div class="col">
+            <div>
+                <label for="deathday">Date of Death</label>
+                <input type="date" name="deathday" [min]="form.date_birth" id="deathday" class="form-control"
+                    [(ngModel)]="form.date_death">
+            </div>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col">
+            <div>
+                <label for="burieddate">Buried Date</label>
+                <input type="date" name="burieddate" id="burieddate" class="form-control"
+                    [(ngModel)]="form.date_buried">
+            </div>
+        </div>
+        <div class="col">
+            <div>
+                <label for="remarks">Remarks</label>
+                <input type="text" name="remarks" id="remarks" class="form-control" [(ngModel)]="form.remarks">
+            </div>
+        </div>
+    </div>
+
+    <div>
+        <label for="description">Description</label>
+        <textarea name="description" id="description" class="form-control" [(ngModel)]="form.description"></textarea>
+    </div>
+</div>
+<div class="modal-footer d-flex justify-content-end">
+    <button class="btn btn-danger mr-1" (click)="cancel()">Cancel</button>
+    <button class="btn btn-success" (click)="save()">Save</button>
+</div>

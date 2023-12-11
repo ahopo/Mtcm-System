@@ -1,0 +1,60 @@
+/* Firefox */
+input[type="number"] {
+    -moz-appearance: textfield;
+  }
+  /* other browser*/
+  input::-webkit-outer-spin-button,
+  input::-webkit-inner-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
+  }
+  .options {
+    font-size: large;
+    font-weight: bold;
+  }
+
+  .maindiv {
+    height: 570px; //web
+    // height:600px; // desktop
+    overflow-y: scroll;
+    -ms-overflow-style: none; /* IE and Edge */
+    scrollbar-width: none; /* Firefox */
+  }
+  .maindiv::-webkit-scrollbar {
+    display: none;
+  }
+
+  .imageface {
+    height: 150px;
+    width: 150px;
+    margin-left: 15px;
+  }
+  .imageface >img{
+    border: 1px dashed grey;
+    text-align: center;
+    font-weight: bold;
+    height: 150px;
+    width: 150px;
+    object-fit: cover;
+  }
+  .imageface >div{
+    position: absolute;
+    width: 150px;
+    top: 22%;
+  }
+  .imageid {
+    height: 250px;
+    width: 100%;
+    line-height: 180px;
+    text-align: center;
+    object-fit: cover;
+    font-weight: bold;
+  }
+
+  .list{
+    max-height: 450px; //web
+    // height:600px; // desktop
+    overflow-y: scroll;
+    -ms-overflow-style: none; /* IE and Edge */
+    scrollbar-width: none; /* Firefox */
+  }

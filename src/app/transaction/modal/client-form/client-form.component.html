@@ -1,0 +1,200 @@
+<form onsubmit="return false">
+
+    <div class="modal-header " [ngClass]="{'bg-success': !view&&!edit, 'bg-info':view ,'bg-warning':edit}">
+
+        <ng-template [ngIf]="view">
+            <div class="w-100 row">
+                <h4 class="col text-white">{{client.firstName}} {{client.lastName}} </h4>
+            </div>
+        </ng-template>
+        <ng-template [ngIf]="!view&&!edit">
+            <h4 class="text-white">New Client</h4>
+        </ng-template>
+    </div>
+    <!-- List of Warnings -->
+    <div class="listofwarnings">
+        <div *ngIf="firstName.invalid && (firstName.dirty || firstName.touched)" class="bg-white ]
+     p-2">
+            <!-- first name -->
+            <small *ngIf="firstName.errors.required">
+                <u>{{cdata.firstName}}</u> is required.
+            </small>
+            <small *ngIf="firstName.errors.minlength">
+                <u>{{cdata.firstName}}</u> must be at least 3 characters long.
+            </small>
+        </div>
+        <!-- last name -->
+        <div *ngIf="lastName.invalid && (lastName.dirty || lastName.touched)" class="bg-white rounded p-2 mt-1">
+            <small *ngIf="lastName.errors.required">
+                <u>{{cdata.lastName}}</u> is required.
+            </small>
+            <small *ngIf="lastName.errors.minlength">
+                <u>{{cdata.lastName}}</u> must be at least 2 characters long.
+            </small>
+        </div>
+        <!-- address -->
+        <div *ngIf="address.invalid && (address.dirty || address.touched)" class="bg-white rounded p-2 mt-1">
+            <small *ngIf="address.errors.required">
+                <u>{{cdata.address}}</u> is required.
+            </small>
+            <small *ngIf="address.errors.minlength">
+                <u>{{cdata.address}}</u> must be at least 16 characters long.
+            </small>
+        </div>
+        <!-- phone number -->
+        <div *ngIf="phoneNumber.invalid && (phoneNumber.dirty || phoneNumber.touched)"
+            class="bg-white rounded p-2 mt-1">
+            <small *ngIf="phoneNumber.errors.required">
+                <u>{{cdata.phoneNumber}}</u> is required.
+            </small>
+            <small *ngIf="phoneNumber.errors.minlength">
+                <u>{{cdata.phoneNumber}}</u> must be at least 10 characters long.
+            </small>
+        </div>
+    </div>
+
+    <!-- MAIN BODY -->
+    <div class="modal-body">
+        <div class="d-flex justify-content-start">
+            <div class="mr-4">
+                <img [src]="client.faceimg" class="clientimg">
+                <div *ngIf="!view" class="mt-2 d-flex flex-column">
+                    <button class=" mb-1 btn btn-outline-secondary"
+                        onclick="document.getElementById('selectedFaceImage').click();">
+                        <bi name="upload"></bi>
+                        <small>Upload</small>
+                    </button>
+                    <input type="file" #facefile id="selectedFaceImage" accept='image/*' style="display: none;"
+                        (change)="uploadFaceImg(facefile.files)">
+                    <button class="btn btn-outline-secondary" (click)="openCamera()">
+                        <bi name="camera"></bi>
+                        <small>Camera</small>
+                    </button>
+                </div>
+            </div>
+            <div class="flex-fill">
+                <div class="row">
+                    <div class=" col form-group ">
+                        <label for="firstName">First Name</label>
+                        <input tabindex="1" type="text" id="firstName" name="firstName" class="form-control"
+                            [ngClass]="{'border border-danger':firstName.invalid}" [readOnly]="view"
+                            [(ngModel)]="client.firstName" #firstName="ngModel" minlength="3" required>
+                    </div>
+                    <div class=" col form-group">
+                        <label for="lastName">Suffix Name</label>
+                        <input tabindex="4" type="text" id="suffixName" name="suffixName" class="form-control"
+                            [readOnly]="view" [(ngModel)]="client.suffixName" maxlength="3" required>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col form-group">
+
+                        <label for="middleName">Middle Name</label>
+                        <input tabindex="2" type="text" id="middleName" name="middleName" class="form-control"
+                            [readOnly]="view" [(ngModel)]="client.middleName">
+                    </div>
+                    <div class="col form-group">
+                        <label for="middleName">Gender</label>
+                        <select tabindex="5" class="form-control" [(ngModel)]="client.gender" [disabled]='view'
+                            name="gender" aria-label="Default select example">
+                            <option selected>--</option>
+                            <option value="1" label="Male"></option>
+                            <option value="2" label="Female"></option>
+                            <option value="3" label="Other"></option>
+                        </select>
+
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col form-group">
+                        <label for="lastName">Last Name</label>
+                        <input tabindex="3" type="text" id="lastName" name="lastName" class="form-control"
+                            [ngClass]="{'border border-danger':lastName.invalid}" [readOnly]="view"
+                            [(ngModel)]="client.lastName" #lastName="ngModel" minlength="2" required>
+                    </div>
+                    <div class="col form-group">
+
+
+                        <label for="phonenumber">Phone Number</label>
+                        <div class="input-group ">
+                            <span class="input-group-text" id="basic-addon1">+63</span>
+                            <input tabindex="6" type="text" class="form-control" id="phonenumber" name="phonenumber"
+                                maxlength="10" aria-label="phonenumber" aria-describedby="basic-addon1"
+                                [readOnly]="view" [(ngModel)]="client.phoneNumber" #phoneNumber="ngModel" minlength="10"
+                                [ngClass]="{'border border-danger':phoneNumber.invalid}" required>
+                        </div>
+                    </div>
+
+                </div>
+
+                <div class="row">
+                    <div class=" col form-group">
+                        <label for="email">E-mail</label>
+                        <input tabindex="7" type="email" id="email" name="email" class="form-control" [readOnly]="view"
+                            [(ngModel)]="client.email">
+
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class=" col form-group">
+                <label for="address">Address</label>
+                <textarea tabindex="8" id="address" rows="2" class="form-control" name="address" [readOnly]="view"
+                    [(ngModel)]="client.address" #address="ngModel" minlength="16"
+                    [ngClass]="{'border border-danger':address.invalid}" required></textarea>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col">
+                <div class="row p-1">
+                    <h5>Valid I.D Front View</h5>
+                    <small class="text-info ml-4" *ngIf="client.frontID&&!view">
+                        Click image to change
+                    </small>
+                    <img [src]="client.frontID" class="validid" alt="Click to select"
+                        onclick="document.getElementById('selectedImage').click();" name="frontimage" id="frontimage">
+                </div>
+                <ng-template [ngIf]="!view">
+                    <div class="row">
+                        <span style="color:red;" *ngIf="frontMessage">{{frontMessage}}</span>
+                        <input type="file" #file id="selectedImage" accept='image/*' style="display: none;"
+                            (change)="uploadFront(file.files)">
+                    </div>
+                </ng-template>
+            </div>
+            <div class="col">
+                <div class="row p-1">
+                    <h5>Valid I.D Back View</h5>
+                    <small class="text-info ml-4" *ngIf="client.backID&&!view">
+                        Click image to change
+                    </small>
+                    <img [src]="client.backID" class="validid" id="backimage" alt="Click to select"
+                        onclick="document.getElementById('selectedBackImage').click();">
+                </div>
+                <ng-template [ngIf]="!view">
+                    <div class="row">
+                        <span style="color:red;" *ngIf="backMessage">{{backMessage}}</span>
+                        <input type="file" #backfile id="selectedBackImage" accept='image/*' style="display: none;"
+                            (change)="uploadBack(backfile.files)">
+                    </div>
+                </ng-template>
+            </div>
+        </div>
+
+
+    </div>
+    <div class="modal-footer">
+        <ng-template [ngIf]="!view">
+            <button class="btn btn-danger" (click)="close()">Cancel</button>
+            <button [disabled]="firstName.invalid||lastName.invalid||phoneNumber.invalid||address.invalid"
+                class="btn btn-success" (click)="save()">Save</button>
+        </ng-template>
+        <ng-template [ngIf]="view">
+            <button class="btn btn-info" (click)="close()">Close</button>
+        </ng-template>
+
+    </div>
+</form>
+
+<ngx-loading [show]="loading" [config]="{ backdropBorderRadius: '3px' }"></ngx-loading>

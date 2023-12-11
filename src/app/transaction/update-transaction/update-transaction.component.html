@@ -1,0 +1,38 @@
+<div class="container-fluid maindiv">
+    <ul class="nav  nav-pills  d-flex justify-content-end">
+        <button type="button" class="btn btn-outline-success btn-sm mb-2 mr-2" [routerLink]="previousUrl">
+            <bi name="box-arrow-left"></bi>
+        </button>
+        <button *ngIf="showsubmit" type="button" class="btn btn-outline-success btn-sm mb-2 mr-2"
+            (click)="submit(form)"> Update
+        </button>
+        <h3 class="flex-fill">{{cusname}}</h3>
+        <li class="nav-item">
+            <button class="btn btn-outline-success mr-1" [routerLink]="['basic']" (click)="showsubmit=true"
+                routerLinkActive="active">Basic Information</button>
+        </li>
+
+        <li class="nav-item" *ngIf="showPaments">
+            <button class="btn btn-outline-success  mr-1" [routerLink]="['payment']" (click)="showsubmit=false"
+                [routerLinkActive]="['active']">Payment Information</button>
+        </li>
+        <li class="nav-item" *ngIf="showPaments&&showConstruction">
+            <button class="btn btn-outline-success  mr-1" [routerLink]="['construction']" (click)="showsubmit=false"
+                [routerLinkActive]="['active']">Construction Payment</button>
+        </li>
+        <li class="nav-item" *ngIf="showPaments">
+            <button class="btn btn-outline-success  mr-1" [routerLink]="['miscellaneous']" (click)="showsubmit=false"
+                [routerLinkActive]="['active']">Miscellaneous</button>
+        </li>
+        <li class="nav-item" *ngIf="showPaments">
+            <button class="btn btn-outline-success  mr-1" [routerLink]="['deceased']" (click)="showsubmit=false"
+                [routerLinkActive]="['active']">Deceased Information</button>
+        </li>
+    </ul>
+    <div class="flex-fill">
+        <form #form>
+            <router-outlet></router-outlet>
+        </form>
+    </div>
+
+</div>

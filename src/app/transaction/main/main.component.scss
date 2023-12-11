@@ -1,0 +1,34 @@
+.table-responsive {
+  height: 87vh; //web
+  // height:600px; // desktop
+  overflow-y: scroll;
+}
+.table-responsive::-webkit-scrollbar {
+  display: none;
+}
+
+.tablerow {
+  animation: fadeInDown; /* referring directly to the animation's @keyframe declaration */
+  animation-duration: 0.5s; /* don't forget to set a duration! */
+}
+.table {
+  animation: fadeIn; /* referring directly to the animation's @keyframe declaration */
+  animation-duration: 1s; /* don't forget to set a duration! */
+}
+
+#app {
+  text-align: center;
+  color: #2c3e50;
+}
+#video {
+  background-color: #000000;
+}
+#canvas {
+  display: none;
+}
+li {
+  display: inline;
+  padding: 5px;
+}
+
+//

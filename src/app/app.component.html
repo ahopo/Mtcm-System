@@ -1,0 +1,31 @@
+<nav *ngIf="login" class="navbar navbar-light sticky-top">
+  <div class="d-flex p-0 m-0">
+    <img class="icon mr-2" [src]="img" alt="">
+    <div class="d-flex flex-column">
+      <span>{{ fullname}} <small>({{groupName}})</small></span>
+      <small>{{email}}</small>
+    </div>
+  </div>
+  <div><span>{{currenttime}}</span></div>
+  <ul class="nav" id='nav'>
+
+    <button class="nav-item btn btn-outline-light ml-2 " *ngFor="let nav of navlist" [routerLink]="[nav.path]"
+      routerLinkActive="active">
+      <bi name="{{nav.icon}}"></bi>
+      <small>{{nav.name}}</small>
+    </button>
+    <button class="nav-item btn btn-outline-light  ml-2 " (click)="logout()">
+      <bi class="text-danger" name="box-arrow-right"></bi> <small>Logout</small>
+    </button>
+  </ul>
+</nav>
+<div class="mt-1 maindiv ">
+  <router-outlet *ngIf="login"></router-outlet>
+  <div *ngIf="serverIsDown">
+    <div class="serverisdown">
+      <h1>SERVER IS DOWN!</h1>
+
+    </div>
+
+  </div>
+  <app-toasts></app-toasts>

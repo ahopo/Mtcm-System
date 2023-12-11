@@ -1,0 +1,217 @@
+<div class=" container-fluid row pl-0">
+
+    <div class=" col-2 p-1">
+        <div class="list-group ">
+            <h5 class="text-center">Mausoleum/s</h5>
+            <button class=" btn btn-outline-success m-0 pr-1 pl-1 mb-2 btn-sm"
+                [ngClass]="{'active':memmodels[i]==currentindex}" (click)="getIndex(i)" [id]="i"
+                *ngFor="let item of memparkList;index as i">
+                <h5>{{item.name}}</h5>
+                <div *ngIf="item.name=='Memorial lot'||item.name=='Lawn'">
+                    <small>
+                        <i>
+                            <bi name="geo-alt"></bi> {{item.phase|uppercase}}, BLOCK : {{item.block}}, LOT :
+                            {{item.lot}}
+                        </i>
+                    </small>
+
+                </div>
+                <div *ngIf="item.name=='Apartment'||item.name=='Bone Crypt'">
+                    <small><i>
+                            <bi name="geo-alt"></bi> {{item.phase|uppercase}}, COLUMN : {{item.column}}, VAULT :
+                            {{item.vault}}
+                        </i></small>
+                </div>
+            </button>
+        </div>
+
+    </div>
+
+    <div class=" col p-1 border-left form-group border-top">
+        <div class="d-flex justify-content-around">
+            <div class="p-3 mr-1">
+                <div class="d-flex justify-content-center text-success">
+                    <span *ngIf="isInitialPayment" class="font-weight-bold">Initial Transaction.</span>
+                    <span *ngIf="!isInitialPayment" class="font-weight-bold">--</span>
+                </div>
+                <div>
+                    <input [disabled]="lock.installment" class="form-check-input ml-1" (change)="checkIntialPayment()"
+                        [(ngModel)]="paymentData.isInstallment" type="checkbox" name="installment" id="installment">
+                    <label for="installment" class="form-check-label ml-4">Installment</label>
+                </div>
+            </div>
+            <div class="mr-2" [ngClass]="{'flex-fill':!paymentData.isInstallment}" *ngIf="!paymentData.isInstallment">
+                <label for="price">Price</label>
+                <input disabled class="form-control font-weight-bold" type="text"
+                    [ngClass]="{'form-control-lg flex-fill':!paymentData.isInstallment}" name="price" id="price"
+                    [(ngModel)]="paymentData.price" currencyMask [options]="options">
+            </div>
+            <div *ngIf="paymentData.isInstallment" class="mr-2 w-25">
+                <label for="downpayment">Downpayment</label>
+                <input class="form-control" [disabled]="this.paymentData.id>0" type="text" name="downpayment"
+                    id="downpayment" [(ngModel)]="paymentData.payment" (keyup)="computePayment()" currencyMask
+                    [options]="options">
+            </div>
+            <div *ngIf="paymentData.isInstallment" style="width: 16%;" class="w-25">
+                <label for="terms">Payment Terms</label>
+                <select class="form-control" name="terms" id="terms"
+                    [disabled]="paymentData.payment==0||this.paymentData.id>0" [(ngModel)]="paymentData.payment_terms"
+                    (change)=" getPaymentTermsData()">
+                    <option *ngFor="let item of paymentTerms" [value]="item.months" [label]="item.name">{{item.name}}
+                    </option>
+                </select>
+            </div>
+            <div class="row ml-2     mt-2 mr-1" *ngIf="paymentData.isInstallment">
+                <div class="col d-flex flex-column text-center">
+                    <h5>Interest</h5>
+                    <h3 class="text-center">
+                        <b>{{paymentData.interest|percent}}</b>
+                    </h3>
+                </div>
+                <div class="col d-flex flex-column text-center">
+                    <h5>Price</h5>
+                    <h3 class="text-center">
+                        <b>{{paymentData.price|currency:'₱':'code'}}</b>
+                    </h3>
+                </div>
+            </div>
+        </div>
+        <div class="row mt-lg-1 ml-1">
+            <div class="table-responsive">
+                <table class="table table-bordered text-xsmall  table-sm table-hover " style="width: 100%">
+                    <thead>
+                        <tr>
+                            <th scope="col" class="text-center" style="width: 2%;"></th>
+                            <th scope="col" class="text-center" style="width: 5%;">O.R number</th>
+                            <th scope="col" class="text-center" style="width:7%">Date</th>
+                            <th scope="col" class="text-center" style="width:7%">
+                                <span *ngIf="!paymentData.isInstallment">Price</span>
+                                <span *ngIf="paymentData.isInstallment">Monthly</span>
+                            </th>
+                            <th scope="col" class="text-center" style="width:7%">Payment Received</th>
+                            <th scope="col" class="text-center" style="width:7%">Penalty</th>
+                            <th scope="col" class="text-center" style="width:7%">Discount</th>
+                            <th scope="col" class="text-center" style="width:7%">Balance</th>
+                            <th scope="col" class="text-center">Description</th><!-- remarks-->
+                            <th scope="col" class="text-center" style="width:10%">Remarks</th> <!-- status-->
+                            <th scope="col" class="text-center" style="width:4%">Receipt</th> <!-- status-->
+                            <th scope="col" class="text-center " style="width:21%">
+                                <div class="d-flex " *ngIf="isInitialPayment">
+                                    <!--||onPenalty||!validYear-->
+                                    <button
+                                        [disabled]="lock.addbutton||!(paymentData.computed_balance>0)&&paymentData.isInstallment"
+                                        class="btn btn-success flex-fill " (click)="addpayment()">
+                                        <bi name="cash"></bi>
+                                        <span *ngIf="!onPenalty">
+                                            <small class="ml-1">
+                                                <span *ngIf="isInitialPayment">Confirm</span>
+                                                Payment</small>
+                                        </span>
+                                        <span *ngIf="onPenalty">
+                                            <small>Confirm Penalty Payment</small>
+                                        </span>
+
+                                    </button>
+                                </div>
+                                <span *ngIf="!isInitialPayment">Actions</span>
+                            </th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr [ngClass]="{'initpayment ':item.isFirstDp==1&&item.isInstallment==1||item.isFullyPaid==1,'bg-light':PAYMENTLIST[i].or_number==undefined,'penaltyrow':PAYMENTLIST[i].penalty>0}"
+                            *ngFor="let item of PAYMENTLIST;index as i">
+                            <!-- number index -->
+                            <th scope="row">{{i==0?'*':i}}</th>
+                            <!-- OR number -->
+                            <td *ngIf="item.or_number!=undefined "
+                                [ngClass]="{'font-weight-bold':item.or_number!=undefined}">
+                                {{helper.padZero(item.or_number,7)}}</td>
+                            <!-- OR number -->
+                            <td *ngIf="item.or_number==undefined " class="bg-light">0000000</td>
+                            <!-- Date -->
+                            <td class="text-center ">
+                                <small class="font-weight-bold">
+                                    {{item.paid_at|date:"LLL d yyyy"}}
+                                </small>
+                            </td>
+                            <!-- monthly -->
+                            <td class="text-right">
+                                <small *ngIf="item.penalty>0&&SelectedINDEX!=i" class="text-danger">*with penalty
+                                </small>
+                                {{item.monthly|currency:'₱':'code'}}
+                            </td>
+                            <!-- Received payment -->
+                            <td class="text-right">
+                                <small *ngIf="SelectedINDEX==i" class="text-danger">*Total</small>
+                                {{item.payment|currency:'₱':'code'}}
+                            </td>
+                            <!-- Penalty -->
+                            <td class="text-right text-danger">{{item.penalty|currency:'₱':'code'}}</td>
+                            <!-- Discount -->
+                            <td class="text-right text-success font-weight-bold">
+                                {{item.discount|currency:'₱':'code'}}
+                            </td>
+                            <td class="text-right">{{item.balance|currency:'₱':'code'}}</td>
+                            <td>{{item.remarks}}</td>
+                            <td class="m-0 p-0 text-center"
+                                [ngClass]="{'bg-success text-center font-weight-bold':item.isFullyPaid==1}">
+                                <span class="ml-2 "
+                                    *ngIf="item.isFirstDp==1&&item.isInstallment==1"><small>DOWNPAYMENT</small>
+                                </span>
+                                <span class="ml-1 " *ngIf="item.isFirstDp!=1&&item.isInstallment==1"><small>MONTHLY
+                                        PAYMENT</small>
+                                </span>
+                                <span class="text-white" *ngIf="item.isFullyPaid==1">
+                                    FULLY PAYMENT
+                                </span>
+                            </td>
+                            <td>
+                                <button class="btn" [disabled]="item.or_number==undefined" *ngIf="item.or_number!='0'"
+                                    (click)="getDataAndGenerate(item.deals_id,item.or_number)"
+                                    [ngClass]="{'btn-outline-secondary ':item.or_number==undefined||item.or_number=='0','btn-outline-success':item.or_number!=undefined&&item.or_number!='0'}">
+                                    <bi name="download"></bi>
+                                </button>
+                            </td>
+                            <td class="m-0 p-0 bg-white">
+                                <h3 *ngIf="item.payment>0 && item.or_number!=undefined&&!(item.penalty>0)"
+                                    class="text-success text-center">PAID
+                                </h3>
+                                <h6 class="text-success text-center" *ngIf="item.penalty>0">
+                                    PAID WITH PENALTY
+                                </h6>
+                                <h6 class="text-success text-center" *ngIf="item.or_number==0&&!(item.penalty>0)">
+                                    ADVANCE PAYMENT
+                                </h6>
+                                <div class="d-flex m-1 p-0" *ngIf="item.or_number==undefined&&item.isInstallment==1">
+                                    <button class="btn btn-info btn-sm flex-fill mr-1" (click)="addDiscount()"
+                                        *ngIf="item.isFirstDp==1&&item.isInstallment==1||item.isFullyPaid==1||item.isInstallment==0">
+                                        <small>
+                                            Add Discount
+                                        </small>
+                                    </button>
+
+                                    <button [id]="'edit_id_'+item.id" *ngIf="!isInitialPayment"
+                                        class="btn  btn-sm flex-fill mr-1" [ngClass]="{'btn-warning':item.ShowCurrent,
+                                        'btn-success btn-sm':item.ShowAdvance,
+                                        'btn-danger btn-sm':item.ShowPenalty}" (click)="updatePayment(item,i)">
+                                        <small>
+                                            <bi name="cash"></bi>
+                                            <span *ngIf="item.ShowPenalty">Pay with penalty</span>
+                                            <span *ngIf="item.ShowCurrent">Pay</span>
+                                            <span *ngIf="item.ShowAdvance">Advance</span>
+                                        </small>
+                                    </button>
+                                </div>
+                            </td>
+
+                        </tr>
+
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="progressbar" *ngIf="progress>0">
+    <ngb-progressbar [showValue]="progress>0" type="success" [value]="progress"></ngb-progressbar>
+</div>

@@ -1,0 +1,13 @@
+<div class="modal-header bg-info">
+    <small class="text-white"><b> Admin code is required to continue.</b></small>
+</div>
+<div class="modal-body">
+    <form action="form-group ">
+        <input type="password" class="form-control border border-danger" (keyup.enter)="Approve()" name="admincode"
+            [(ngModel)]="admincode">
+    </form>
+</div>
+<div class="modal-footer">
+    <button class="btn btn-danger" (click)="No()">No</button>
+    <button class="btn btn-success" (click)="Approve()">Continue</button>
+</div>

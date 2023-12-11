@@ -1,0 +1,49 @@
+@import "~animate.css/animate.min.css";
+a:link {
+  text-decoration: none;
+}
+
+.list-group {
+  width: 200px;
+}
+.icon {
+  height: 50px;
+  width: 50px;
+  border-radius: 50px;
+}
+.maindiv {
+  width: 100vw;
+  height: 100vh;
+}
+
+.navbar {
+  color: white;
+  // background: #1D976C;  /* fallback for old browsers */
+  // background: -webkit-linear-gradient(to left, #93F9B9, #1D976C);  /* Chrome 10-25, Safari 5.1-6 */
+  // background: linear-gradient(to left, #93F9B9, #1D976C); /* W3C, IE 10+/ Edge, Firefox 16+, Chrome 26+, Opera 12+, Safari 7+ */
+
+  background-color: #3bb78f;
+  background-image: linear-gradient(315deg, #3bb78f 0%, #0bab64 74%);
+}
+
+img {
+  object-fit: cover;
+}
+a {
+  cursor: pointer;
+}
+.digital-clock {
+  font-size: 3em; /*To change the size of the numbers*/
+  max-width: 250px; /*To change the widt of the clock*/
+  text-align: center;
+  border: 2px solid black; /*To change the border around the clock*/
+  border-radius: 20px; /*To change how round the edges are*/
+  background-color: white; /*To change the background color of the clock*/
+}
+
+.serverisdown {
+  position: absolute;
+  top: 50%;
+  left: 40%;
+  color: red;
+}

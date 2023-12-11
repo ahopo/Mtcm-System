@@ -1,0 +1,70 @@
+<div class="d-flex justify-content-end p-1">
+    <div class="row w-50 ">
+        <div class="col-6 d-flex  justify-content-end">
+            <pagination-controls autoHide="true" previousLabel="" nextLabel="" (pageChange)="page = $event">
+            </pagination-controls>
+        </div>
+        <div class="col-6  d-flex justify-content-around">
+            <button class="btn flex-fill   mr-2"
+                [ngClass]="{'btn-success':vattype==2,'btn-outline-secondary':vattype!=2}"
+                (click)="filterVat(2)">ALL</button>
+            <button class="btn  flex-fill  mr-2"
+                [ngClass]="{'btn-success':vattype==0,'btn-outline-secondary':vattype!=0}"
+                (click)="filterVat(0)">VAT</button>
+            <button class="btn  flex-fill  mr-2 "
+                [ngClass]="{'btn-success':vattype==1,'btn-outline-secondary':vattype!=1}"
+                (click)="filterVat(1)">Non-VAT</button>
+        </div>
+    </div>
+
+
+</div>
+
+
+<div class="table-responsive">
+    <table class="table table-striped table-bordered">
+        <thead>
+            <tr>
+                <th class="text-center" style="width:1%;">{{orList.length}}</th>
+                <th class="text-center" style="width:5%;">Number</th>
+                <th class="text-center" style="width:15%;">Owner</th>
+                <th class="text-center" style="width:10%;">Status</th>
+                <th class="text-center" style="width:15%;">Created At</th>
+                <th class="text-center" style="width:15%;">Created By</th>
+                <th class="text-center" style="width:15%;">Valid Until</th>
+                <th class="text-center" style="width:5%;">Type</th>
+                <th class="text-center" style="width: 15%;">
+                    <div class="d-flex p-0 m-0" *ngIf="lock.ATOA||lock.ATOAS">
+                        <button class="btn btn-success flex-fill" (click)="newOR()">
+                            <bi name="receipt"></bi> New O.R
+                        </button>
+                    </div>
+                </th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr *ngFor="let item of orList.reverse() | paginate: { itemsPerPage: 50, currentPage: page };index as i">
+                <td class="text-center">{{i+1}}</td>
+                <td class="text-center">{{helper.padZero(item.value,7)}}</td>
+                <td class="text-center">{{item.owner}}</td>
+                <td class="text-center">{{item.status===1?'Valid':item.status==2?'Not Available':'Invalid'}}</td>
+                <td class="text-center"><small><b>{{item.created_at|date:'EEE,LLL d yyyy '}}</b></small></td>
+                <td class="text-center">{{item.created_by}}</td>
+                <td class="text-center">{{item.to_date|date:'EEE,LLL d yyyy '}}</td>
+                <td class="text-center">{{item.type==0?'VAT':'Non-VAT'}}</td>
+                <td class="text-center">
+                    <div class="d-flex" *ngIf="lock.ATOD||lock.ATODS">
+                        <button class="btn btn-danger flex-fill" (click)="delete(item)"
+                            [disabled]="item.customer_id!=undefined">
+                            <bi name="trash"></bi>Delete
+                        </button>
+                    </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+</div>
+<div class="progressbar" *ngIf="progress>0">
+    <ngb-progressbar [showValue]="progress>0" type="success" [value]="progress"></ngb-progressbar>
+
+</div>

@@ -1,0 +1,211 @@
+<form onsubmit="return false">
+    <div class="modal-header bg-success">
+        <div class="row w-100">
+            <h4 class=" modal-title text-white col-2">New User</h4>
+            <div *ngIf="status=='edit'&& SelectedUser.id==currentUser" class="col row d-flex justify-content-end">
+                <h6 *ngIf="!showcode" class="mt-2">●●●●●●●●</h6>
+                <h6 *ngIf="showcode" class="font-weight-bold">CODE: {{SelectedUser.code}} <br> <small
+                        class="text-light font-weight-light">Please do not share
+                        this to other users</small> </h6>
+
+                <button class="btn btn-info ml-4" (click)="showCode(!showcode)">
+                    <bi *ngIf="!showcode" name="eye"></bi>
+                    <bi *ngIf="showcode" name="eye-slash"></bi>
+                </button>
+
+            </div>
+        </div>
+
+    </div>
+    <div class="modal-body form-group">
+        <div class="row">
+            <div class="col-3">
+                <div class="d-flex flex-column">
+                    <img [src]="SelectedUser.img" alt="Upload Image." id="profilepic"
+                        [ngClass]="{'border-danger':SelectedUser.img==undefined||SelectedUser.img==''}">
+                    <span style="color:red;" *ngIf="message">{{message}}</span>
+                    <div *ngIf="newuser||status=='edit'">
+                        <input type="file" #file id="selectedImage" accept='image/*' style="display: none;"
+                            (change)="preview(file.files)">
+                        <div class="row p-0 m-0 imagebutton d-flex justify-content-between">
+                            <button class="btn btn-outline-info"
+                                onclick="document.getElementById('selectedImage').click();">
+                                <bi name="upload"></bi> <span>Upload</span>
+                            </button>
+                            <button class="btn btn-outline-info" (click)="openCamera()">
+                                <bi name="camera"></bi> <span>Camera</span>
+                            </button>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+            <div class="col">
+                <div class="row">
+                    <div class="col">
+                        <label for="firstname">First name</label>
+                        <input type="text" [(ngModel)]="SelectedUser.firstName" class="form-control" id="firstname"
+                            [ngClass]=" {'border-danger':SelectedUser.firstName==undefined||SelectedUser.firstName==''
+                            }" name="firstname" #firstname="ngModel" minlength="3" required>
+                        <small class="text-danger">
+                            <span *ngIf="firstname.errors?.required">
+                                Required.
+                            </span>
+                            <span *ngIf="firstname.errors?.minlength"> Must be at least 3 characters long.
+                            </span>
+                        </small>
+                    </div>
+                    <div class=" col">
+                        <label for="middlename">Middle name</label>
+                        <input type="text" [(ngModel)]="SelectedUser.middleName" class="form-control" id="middlename"
+                            name="middlename">
+
+                    </div>
+                    <div class="col">
+                        <label for="lastname">Last name</label>
+                        <input type="text" [(ngModel)]="SelectedUser.lastName" class="form-control" id="lastname"
+                            [ngClass]="{'border-danger':SelectedUser.lastName==undefined||SelectedUser.lastName==''}"
+                            name="lastname" #lastname="ngModel" required>
+                        <small class="text-danger">
+                            <span *ngIf="lastname.errors?.required">
+                                Required.
+                            </span>
+
+                        </small>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col">
+                        <label for="email">Email address</label>
+                        <input type="email" class="form-control" [(ngModel)]="SelectedUser.email" id="email"
+                            [ngClass]="{'border-danger':SelectedUser.email==undefined||SelectedUser.email==''}"
+                            name="email" #email="ngModel" required email="true">
+                        <small class="text-danger">
+                            <span *ngIf="email.errors?.required">
+                                Required.
+                            </span>
+                            <span *ngIf="email.errors?.email">
+                                Please input email
+                            </span>
+
+                        </small>
+
+                    </div>
+                    <div class="col">
+                        <label for="phone_number">Phone number</label>
+                        <input type="phonenumber" class="form-control" [(ngModel)]="SelectedUser.phonenumber"
+                            [ngClass]="{'border-danger':SelectedUser.phonenumber==undefined||SelectedUser.phonenumber==''}"
+                            id="phone_number" name="phone_number" (keyup)="validateNumber()" #phone_number="ngModel"
+                            minlength="10" maxlength="10" required>
+                        <small class="text-danger">
+                            <span *ngIf="phone_number.errors?.required">
+                                Required.
+                            </span>
+                            <span *ngIf="phone_number.errors?.minlength"> Must be at least 10 digits long.
+                            </span>
+                        </small>
+                    </div>
+                    <div class="col">
+                        <label for="group">Group</label>
+                        <select name="group" id="group" class="form-control" [(ngModel)]="SelectedUser.groupId"
+                            (change)="CheckGroup()"
+                            [ngClass]="{'border-danger':SelectedUser.groupId==undefined||SelectedUser.groupId==''}"
+                            #group="ngModel" required>>
+                            <option label="Select gruop" selected hidden></option>
+                            <option [label]="item.name" [value]="item.id" *ngFor="let item of groupList"></option>
+                        </select>
+                        <small class="text-danger">
+                            <span *ngIf="group.errors?.required">
+                                Required.
+                            </span>
+
+                        </small>
+                    </div>
+                </div>
+                <div>
+                    <label for="address">Address</label>
+                    <textarea type="textarea" [(ngModel)]="SelectedUser.address" class="form-control" id="address"
+                        [ngClass]="{'border-danger':SelectedUser.address==undefined||SelectedUser.address==''||SelectedUser.username==''}"
+                        name="address" #textarea="ngModel" minlength="16" required></textarea>
+
+                    <small class="text-danger">
+                        <span *ngIf="textarea.errors?.required">
+                            Required.
+                        </span>
+                        <span *ngIf="textarea.errors?.minlength"> Must be at least 16 characters long.
+                        </span>
+                    </small>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+
+        </div>
+        <div class="row">
+            <div class="form-check col d-flex justify-content-center mt-4">
+                <div class="mt-2">
+                    <input disabled type="checkbox" class="form-check-input" id="have_supervision"
+                        name="have_supervision" [(ngModel)]="SelectedUser.have_supervision">
+                    <label class="form-check-label font-weight-bolder" for="have_supervision">Has Supervision</label>
+                </div>
+
+            </div>
+            <div class="col">
+                <label for="username">Username</label>
+                <input type="username" class="form-control" [(ngModel)]="SelectedUser.username" id="username"
+                    [ngClass]=" {'border-danger':SelectedUser.username==undefined||SelectedUser.username==''}"
+                    (keyup)="checkUserName()" name="username" #username="ngModel" minlength="5" required>
+                <small class="text-danger">
+                    <span *ngIf="username.errors?.required">
+                        Required.
+                    </span>
+                    <span *ngIf="username.errors?.minlength"> Must be at least 5 characters long.
+                    </span>
+                    <span *ngIf="!username.errors?.minlength&&ExistingUsername"> Username is already in use.
+                    </span>
+                </small>
+            </div>
+            <ng-template [ngIf]="newuser||status=='edit'">
+
+                <div class=" col">
+                    <label for="password">Password</label>
+                    <input type="password" maxlength="16" minlength="8" class="form-control"
+                        [disabled]="status=='edit'&&!changepassword" [(ngModel)]="SelectedUser.password" id="password"
+                        name="password">
+                    <ng9-password-strength-bar [passwordToCheck]="SelectedUser.password" [barColors]="myColors"
+                        [barLabel]="barLabel" [baseColor]="baseColor" [strengthLabels]="strengthLabels"
+                        (onStrengthChanged)="strengthChanged($event)">
+                    </ng9-password-strength-bar>
+                    <!-- <small *ngIf="SelectedUser.password.length<8&&SelectedUser.password!=undefined"
+                        class="text-danger">Password must have at least 8 character</small> -->
+                </div>
+
+                <div class="col">
+                    <label for="confirmpassword">Confirm Password</label>
+                    <input type="password" class="form-control" [disabled]="status=='edit'&&!changepassword"
+                        [ngClass]="{'border border-danger':SelectedUser.password!=confirm_password}"
+                        [(ngModel)]="confirm_password" id="confirmpassword" name="confirmpassword">
+                </div>
+            </ng-template>
+        </div>
+    </div>
+
+    <div class="modal-footer">
+        <div class="row w-100">
+
+
+            <div class="col-3 d-flex justify-content-start " *ngIf="status=='edit'">
+                <input type="checkbox" class="form-check-input" id="changepassword" (change)="changePassword()"
+                    (change)="changepassword=!changepassword">
+                <label class="form-check-label" for="changepassword">Change Password</label>
+            </div>
+            <div class="col-3"><span class="flex-fill">{{errormessage}}</span></div>
+            <div class="col d-flex justify-content-end">
+                <button class="btn btn-danger mr-1" (click)="close()">Cancel</button>
+                <button id="savebutton" *ngIf="newuser||status=='edit'"
+                    [disbabled]="SelectedUser.password!=confirm_password||confirm_password==''" class="btn btn-success"
+                    (click)="save()">Save</button>
+            </div>
+        </div>
+    </div>
+</form>
